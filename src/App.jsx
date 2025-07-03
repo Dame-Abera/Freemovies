@@ -43,7 +43,7 @@ const App = () => {
       console.error("Error fetching movies:", error);
       setErrorMessage(error.message)
     }finally{
-      setIsLoading(true );
+      setIsLoading(false );
     }
   }
   return (
@@ -60,7 +60,7 @@ searchTerm ? `Search results for "${searchTerm}"` : "Search for a movie, actor, 
         }</h1>
         </header>
         <section className="all-movies"></section>
-        <h2>All movies</h2>
+        <h2 className='mt-[40px]'>All movies</h2>
         {
           isLoading ?(<Spinner />):errorMessage?(<div className="text-red-500">{errorMessage}</div>):
           (
