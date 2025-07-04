@@ -3,6 +3,7 @@ import Search from './components/search.jsx'
 import  {useState,useEffect} from 'react';
 import './App.css'
 import { Spinner } from "flowbite-react";
+import MovieCard from './components/MovieCard,.jsx';
 // import { useState } from 'react' https://api.themoviedb.org/3/trending/movie/{time_window}
 const  API_BASE_URL=`https://api.themoviedb.org/3`;
 const API_KEY=import.meta.env.VITE_TMDB_API_KEY;
@@ -66,9 +67,7 @@ searchTerm ? `Search results for "${searchTerm}"` : "Search for a movie, actor, 
           (
             <ul>
               {movies.map((movie) => (
-                  <p  key={movie.id} className="text-white">{movie.title}</p>
-          
-                
+                 <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )
