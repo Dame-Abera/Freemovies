@@ -1,10 +1,15 @@
 import React from 'react'
 
-const MovieCard = ({movie:{ title,vote_average,poster_path,release_date,original_language}}) => {
+const MovieCard = ({movie:{id,title,vote_average,poster_path,release_date,original_language}}) => {
   return (
-    <div>
-      <p key={movie.id} className='text-white'>{movie.title}</p>
-      <p className='text-gray-400'>Rating: {movie.vote_average}</p>
+    <div className='movie-card'>
+      <img
+        src={poster_path ? `https://image.tmdb.org/t/p/w500/${poster_path}` : '/no-movie.png'}
+        alt={title}
+        
+      />
+      <p key={id} className='text-white'>{title}</p>
+      <p className='text-gray-400'>Rating: {vote_average}</p>
     </div>
   )
 }
