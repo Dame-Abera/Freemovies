@@ -3,6 +3,7 @@ import Search from './components/search.jsx'
 import  {useState,useEffect} from 'react';
 import './App.css'
 import { Spinner } from "flowbite-react";
+import {useDebounce} from 'react-use';
 import MovieCard from './components/MovieCard,.jsx';
 // import { useState } from 'react' https://api.themoviedb.org/3/trending/movie/{time_window}
 const  API_BASE_URL=`https://api.themoviedb.org/3`;
@@ -16,19 +17,26 @@ const API_OPTIONS={
 }
 
 const App = () => {
-  const [searchTerm,setSearchTerm]=useState("to  do  list");
+  const [searchTerm,setSearchTerm]=useState("");
   const [errorMessage,setErrorMessage]=useState("");
   const [movies,setMovies]=useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [debouncedSearchTerm,setDebouncedSearchTerm] = useState('');
+  
+  useDebounce(() => {
+    setDebouncedSearchTerm(searchTerm);
+  }, 500, [searchTerm]);
   useEffect(()=>{
-    fetchmovies()
-  },[])
+    fetchmovies(debouncedSearchTerm)
+  },[debouncedSearchTerm])
   console.log("API KEY:", API_KEY);
-  const fetchmovies=async()=>{
+  const fetchmovies=async(query="")=>{
     setIsLoading(true);
     setErrorMessage(""); 
     try{
-      const endpoint=`${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      const endpoint=query
+       ?  `${API_BASE_URL}/search/movie?query=${encodeURI(query)}&include_adult=false`
+       : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
    const  response=await fetch(endpoint,API_OPTIONS);
    
    if(!response.ok){
@@ -60,7 +68,7 @@ const App = () => {
 searchTerm ? `Search results for "${searchTerm}"` : "Search for a movie, actor, or director"
         }</h1>
         </header>
-        <section className="all-movies"></section>
+        <section className="all-movies">
         <h2 className='mt-[40px]'>All movies</h2>
         {
           isLoading ?(<Spinner />):errorMessage?(<div className="text-red-500">{errorMessage}</div>):
@@ -72,6 +80,7 @@ searchTerm ? `Search results for "${searchTerm}"` : "Search for a movie, actor, 
             </ul>
           )
                 }
+                </section>
       </div>
      
       
