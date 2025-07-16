@@ -5,6 +5,7 @@ import './App.css'
 import { Spinner } from "flowbite-react";
 import {useDebounce} from 'react-use';
 import MovieCard from './components/MovieCard,.jsx';
+import { updateSearchCount } from './appwrite.js';
 // import { useState } from 'react' https://api.themoviedb.org/3/trending/movie/{time_window}
 const  API_BASE_URL=`https://api.themoviedb.org/3`;
 const API_KEY=import.meta.env.VITE_TMDB_API_KEY;
@@ -29,7 +30,7 @@ const App = () => {
   useEffect(()=>{
     fetchmovies(debouncedSearchTerm)
   },[debouncedSearchTerm])
-  console.log("API KEY:", API_KEY);
+ 
   const fetchmovies=async(query="")=>{
     setIsLoading(true);
     setErrorMessage(""); 
@@ -43,11 +44,12 @@ const App = () => {
       throw new Error(`HTTP error! status: ${response.status}`);
    }
    const data=await response.json();
-   console.log(data);
+   
    setMovies(data.results);
    if(data.response="False"){
     setErrorMessage
    }
+      updateSearchCount()
     }catch(error){
       console.error("Error fetching movies:", error);
       setErrorMessage(error.message)
