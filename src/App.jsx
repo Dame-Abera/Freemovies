@@ -49,8 +49,13 @@ const App = () => {
    if(data.response="False"){
     setErrorMessage
    }
-      updateSearchCount()
-    }catch(error){
+   if(query && data.results.length > 0){
+     await updateSearchCount(
+        query,
+        data.results[0]
+      )
+    }
+  } catch(error){
       console.error("Error fetching movies:", error);
       setErrorMessage(error.message)
     }finally{
